@@ -40,65 +40,67 @@ void setup()
 
 }
 
-
-
 void loop()
 {
     
   analogWrite(outputPin, outputValue);  //Write output value to output pin
-
-  Serial.print("Output: ");     //display output values for monitoring with a computer
-  Serial.println(outputValue); 
-
-  Serial.print("Time (s): ");
-  Serial.println(millis()/1000);
   
   valueProbeOne = analogRead(analogPinOne);    // read the input value at probe one
+  delay(10); 
+  valueProbeOne = analogRead(analogPinOne);    // read the input value at probe one
   voltageProbeOne = (valueProbeOne*5000)/1023;     //calculate voltage at probe one in milliVolts
-  Serial.print("Voltage Probe One (mV): ");     //display voltage at probe one
-  Serial.println(voltageProbeOne);
   delay(10);  
   
   valueProbeTwo = analogRead(analogPinTwo);    // read the input value at probe two
-  voltageProbeTwo = (valueProbeTwo*5000)/1023;     //calculate voltage at probe two in milliVolts
-  Serial.print("Voltage Probe Two (mV): ");     //display voltage at probe two
-  Serial.println(voltageProbeTwo);  
+  delay(10); 
+  valueProbeTwo = analogRead(analogPinTwo);    // read the input value at probe two
+  voltageProbeTwo = (valueProbeTwo*5000)/1023;     //calculate voltage at probe two in milliVolts 
   delay(10);  
 
   batteryVoltage = 5000 - voltageProbeTwo;     //calculate battery voltage
-  Serial.print("Battery Voltage (mV): ");     //display battery voltage
-  Serial.println(batteryVoltage); 
-
   current = (voltageProbeTwo - voltageProbeOne) / resistance;     //calculate charge current
-  Serial.print("Target Current (mA): ");     //display target current 
-  Serial.println(targetCurrent);  
-  Serial.print("Battery Current (mA): ");     //display actual current
-  Serial.println(current);  
-      
   currentError = targetCurrent - current;     //difference between target current and measured current
-  Serial.print("Current Error  (mA): ");     //display current error 
-  Serial.println(currentError);    
    
   valueProbeThree = analogRead(analogPinThree);    // read the input value at probe three  
+  delay(10); 
+  valueProbeThree = analogRead(analogPinThree);    // read the input value at probe three  
   tmp36Voltage = valueProbeThree * 5.0/1023;     // converting that reading to voltage
- 
   temperatureC = (tmp36Voltage - 0.05 ) * 100 ;     //converting from 10 mv per degree wit 500 mV offset to degrees ((voltage - 500mV) times 100)
 //  temperatureC = temperatureC * 28/50;
 //  temperatureC = valueProbeThree / 2.0479 ; 
-  Serial.print("Temperature (degrees C) ");     //display the temperature in degrees C
-  Serial.println(temperatureC); 
-  Serial.print("analogRead (analogA2) ");     //display the temperature in degrees C
-  Serial.println(valueProbeThree); 
+
  
  /*
   temperatureF = (temperatureC * 9.0 / 5.0) + 32.0;     //convert to Fahrenheit
   Serial.print("Temperature (degrees F) ");
   Serial.println(temperatureF); 
  */
- 
-  Serial.println();     //extra spaces to make debugging data easier to read
-  Serial.println();  
 
+  // PRINT DATAS //
+  Serial.print("Output: ");     //display output values for monitoring with a computer
+  Serial.println(outputValue); 
+
+  Serial.print("Time (s): ");
+  Serial.println(millis()/1000);
+  
+  Serial.print("Voltage Probe One (mV): ");     //display voltage at probe one
+  Serial.println(voltageProbeOne);
+
+  Serial.print("Voltage Probe Two (mV): ");     //display voltage at probe two
+  Serial.println(voltageProbeTwo); 
+
+  Serial.print("Battery Voltage (mV): ");     //display battery voltage
+  Serial.println(batteryVoltage); 
+
+  Serial.print("Target Current (mA): ");     //display target current 
+  Serial.println(targetCurrent);  
+  Serial.print("Battery Current (mA): ");     //display actual current
+  Serial.println(current);  
+  Serial.print("Current Error  (mA): ");     //display current error 
+  Serial.println(currentError); 
+  
+  Serial.print("Temperature (degrees C) ");     //display the temperature in degrees C
+  Serial.println(temperatureC); 
 
 
   if(abs(currentError) > 10)     //if output error is large enough, adjust output
@@ -143,6 +145,9 @@ void loop()
     outputValue = 0;
     Serial.print("Max Charge Time Exceeded");
    }  
+
+   Serial.println();     //extra spaces to make debugging data easier to read
+   Serial.println();  
 
    delay(1000);     //delay 10 seconds before next iteration
 }
